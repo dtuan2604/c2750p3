@@ -24,8 +24,8 @@ int countfromStdin(char targetChar){
 
 int main(int argc, char** argv){
 	char * inputFile = NULL;
-	char targetChar = 'c';
-	char inputChar;
+	int targetChar = 99;
+	int inputChar;
 	int numChar = 0;
 	int checkFlag = 0;
 	int option;
@@ -33,18 +33,18 @@ int main(int argc, char** argv){
 		switch(option){
 			case 'h':
 				help();
-				break;
+				return 1;
 			case 'f':
 				inputFile = optarg;
 				checkFlag = 1;
 				break;
 			case 'c':
 				targetChar = atoi(optarg);
+				printf("Test %c\n",targetChar);
 				break;		
 			case '?':
 				if (optopt == 'c' || optopt == 'f'){
 					fprintf (stderr, "Option -%c requires an argument.\n",optopt);
-					break;
 				}
 				else if ( isprint(optopt))
 					fprintf (stderr, "Unknown option `-%c`.\n", optopt);
@@ -57,13 +57,12 @@ int main(int argc, char** argv){
 		}
 
 	}
-
-	printf("Input File: %s.\n", inputFile);
-	printf("Target Character: %c.\n", targetChar);
 	if(checkFlag == 1){
+		printf("Input File: %s.\n", inputFile);
+	        printf("Target Character: %c.\n", targetChar);
 		FILE * inputPointer = fopen(inputFile, "r");
 		if (inputPointer == NULL){
-			printf("Null File Pointers!\n");
+			printf("Couldn't read the file!\n The file doesn't exist or isn't readable");
 			return EXIT_FAILURE;
 		}
 			
@@ -74,12 +73,21 @@ int main(int argc, char** argv){
 			if (inputChar == targetChar)
 				numChar++;
 			
-		}while (inputChar != EOF);	
+		}while (inputChar != EOF);
+		fclose(inputPointer);	
 	}
-	else
-		numChar = countfromStdin(targetChar);
+	else{
+	 	inputChar = getchar();
+		printf("Input: ");
+		while(inputChar != EOF){
+                	putchar(inputChar);
+			if(inputChar == targetChar)
+                        	numChar++;
+                	inputChar = getchar();
+       		}
+
+	}
 	
 	printf("Number of '%c' found: %d.", targetChar, numChar);  
-
 	return EXIT_SUCCESS;
 }
