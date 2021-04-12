@@ -2,13 +2,12 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <ctype.h>
-#include <string.h>
 
 
 void help(){
 	printf("The options for this program are: \n");
 	printf("-f: input filename (required)\n");
-	printf("-c: specifies a different character to look for in the target file. By default, this is character c\n"); 
+	printf("-c: specifies a different character to look for in the target file. By default, this is character 'c'.\n"); 
 }
 
 
@@ -50,7 +49,7 @@ int main(int argc, char** argv){
 		printf("Input File: %s.\n", inputFile);
 		FILE * inputPointer = fopen(inputFile, "r");
 		if (inputPointer == NULL){
-			printf("Couldn't read the file!\nThe file doesn't exist or isn't readable");
+			printf("Couldn't read the file! '%s' doesn't exist or isn't readable.", inputFile);
 			return EXIT_FAILURE;
 		}
 			
@@ -65,7 +64,7 @@ int main(int argc, char** argv){
 		fclose(inputPointer);	
 	}
 	else{
-	 	inputChar = getchar();
+		inputChar = getchar();
 		printf("Input: ");
 		while(inputChar != EOF){
                 	putchar(inputChar);
