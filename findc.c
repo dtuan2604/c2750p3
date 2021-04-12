@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <ctype.h>
+#include <string.h>
+
 
 void help(){
 	printf("The options for this program are: \n");
@@ -9,22 +11,10 @@ void help(){
 	printf("-c: specifies a different character to look for in the target file. By default, this is character c\n"); 
 }
 
-int countfromStdin(char targetChar){
-	char inputChar = getchar();
-	int count = 0;
-	while(inputChar != EOF){
-		if (inputChar == targetChar)
-			count++;
-		inputChar = getchar();
-	}
-	return count;
-
-}
-
 
 int main(int argc, char** argv){
 	char * inputFile = NULL;
-	int targetChar = 99;
+	char targetChar = 'c';
 	int inputChar;
 	int numChar = 0;
 	int checkFlag = 0;
@@ -39,8 +29,7 @@ int main(int argc, char** argv){
 				checkFlag = 1;
 				break;
 			case 'c':
-				targetChar = atoi(optarg);
-				printf("Test %c\n",targetChar);
+				targetChar = *optarg;
 				break;		
 			case '?':
 				if (optopt == 'c' || optopt == 'f'){
@@ -59,10 +48,9 @@ int main(int argc, char** argv){
 	}
 	if(checkFlag == 1){
 		printf("Input File: %s.\n", inputFile);
-	        printf("Target Character: %c.\n", targetChar);
 		FILE * inputPointer = fopen(inputFile, "r");
 		if (inputPointer == NULL){
-			printf("Couldn't read the file!\n The file doesn't exist or isn't readable");
+			printf("Couldn't read the file!\nThe file doesn't exist or isn't readable");
 			return EXIT_FAILURE;
 		}
 			
@@ -87,7 +75,7 @@ int main(int argc, char** argv){
        		}
 
 	}
-	
+	printf("Target Character: %c.\n", targetChar);	
 	printf("Number of '%c' found: %d.", targetChar, numChar);  
 	return EXIT_SUCCESS;
 }
